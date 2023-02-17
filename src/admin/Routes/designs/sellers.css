@@ -1,0 +1,13 @@
+.sellers-header-btns {
+  padding: 5px 15px;
+  display: flex;
+  justify-content: space-between;
+}
+.sellers-grid-ctr {
+  padding: 20px 15px;
+}
+.sellers-grid-ctr > div:first-child {
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: 600;
+}

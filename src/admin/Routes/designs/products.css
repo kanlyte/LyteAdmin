@@ -1,0 +1,120 @@
+.pdts-header-btns {
+  padding: 5px 15px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/**
+styles for new product
+*/
+.pdts-form-ctr {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  margin: 10px 15px;
+  padding: 15px;
+  border-radius: 5px;
+}
+.new_product_form {
+  display: flex !important;
+}
+.inputs_ctr {
+  flex: 1.5;
+}
+.image-ctr {
+  flex: 1;
+}
+.inputs_ctr {
+  margin-right: 15px;
+}
+.inputs_ctr_flex {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 20px;
+}
+.inputs_ctr_border {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+.inputs_ctr_fullwidth {
+  padding: 15px 20px;
+}
+.inputs_ctr_halfwidth {
+  padding: 15px 20px;
+}
+.new_pdt_btn_refs_ctr {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px;
+}
+
+/*styles for image preview*/
+.images__preview_ctr {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  column-gap: 1rem;
+  row-gap: 1rem;
+}
+.images__preview_ctr > div {
+  /* width: 100px; */
+  height: 150px;
+  position: relative;
+  margin: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+
+.images__preview_ctr > div > img {
+  border-radius: 5px;
+  width: 100%;
+  height: 100%;
+}
+
+/*styles for image preview*/
+
+/**
+styles for new product
+*/
+
+/**
+table structure - Styles for products
+*/
+.pdts-grid-ctr {
+  padding: 5px 15px;
+  display: flex;
+}
+.pdts-grid-ctr > div > span {
+  font-size: 18px;
+  font-weight: bold;
+}
+.pdts-grid-ctr > div:nth-child(1) {
+  flex: 1;
+  margin-right: 10px;
+}
+.pdts-grid-ctr > div:nth-child(2) {
+  flex: 1;
+  margin-left: 10px;
+}
+.pdts-grid-ctr table,
+.full-width-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  text-align: left;
+}
+.pdts-grid-ctr table thead {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.pdts-grid-ctr table thead th {
+  padding: 10px 0px;
+  font-weight: 500;
+}
+.pdts-grid-ctr table tbody td {
+  padding: 10px 0px;
+}
+/**
+table structure - Styles for products
+*/

@@ -1,0 +1,51 @@
+.app-manager-ctr {
+  display: flex;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  margin: 10px;
+}
+.app-manager-ctr > div {
+  flex: 1;
+  margin: 10px;
+}
+.manage-comp-ctr {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0px;
+}
+.manage-comp-ctr-fields {
+  display: grid;
+  grid-template-columns: auto 50%;
+  column-gap: 1rem;
+  row-gap: 1rem;
+}
+
+.manage-tbl-ctr {
+  margin: 15px 0px;
+}
+.manage-tbl-ctr table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.manage-tbl-ctr thead {
+  border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.manage-tbl-ctr th:first-child {
+  width: 10%;
+  text-align: left;
+}
+.manage-tbl-ctr th {
+  width: 20%;
+  text-align: left;
+  padding: 10px 0px;
+}
+.manage-tbl-ctr td:first-child {
+  width: 10%;
+  text-align: left;
+}
+.manage-tbl-ctr td {
+  width: 20%;
+  text-align: left;
+}

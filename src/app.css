@@ -1,0 +1,38 @@
+/* overall styles */
+.card {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  margin: 5px 10px;
+  background-color: white;
+  border-radius: 5px;
+}
+/* overall styles */
+
+/* main ctr */
+.ctr {
+  width: 100vw;
+  max-width: 100%;
+}
+.main {
+  display: flex;
+  margin-top: 10px !important;
+}
+.main-ctr {
+  /* flex: 8.5; */
+  width: calc(100% - 200px);
+  padding: 15px;
+}
+.side-ctr {
+  /* flex: 1.7; */
+  width: 200px;
+  margin-right: 0 !important;
+}
+@media screen and (max-width: 768px) {
+  .main-ctr {
+    width: 100vw;
+  }
+  .side-ctr {
+    position: absolute;
+    z-index: 2;
+  }
+}
+/* queries */
