@@ -6,12 +6,6 @@ import App from "./App";
 import { MuiThemeProvider } from "@material-ui/core/styles";
 import { createTheme } from "@material-ui/core/styles";
 
-//redux
-import { Provider } from "react-redux";
-import { createStore, applyMiddleware, compose } from "redux";
-import thunk from "redux-thunk";
-import reducers from "./reducers/reducers";
-
 const THEME = createTheme({
   typography: {
     fontFamily: `"Lato", sans-serifs`,

@@ -1,31 +1,21 @@
 //styles
 import "./login.css";
-import "../../Designs/main.css";
+import "../../../Designs/main.css";
 
 //assets
-import LOGO from "../../assets/logos/plus_logo_color.png";
-import SellerImg from "../../assets/sell.jpg";
+import LOGO from "../../../assets/logos/lyte.png";
+import SellerImg from "../../../assets/sell.jpg";
 
 //material
-import {
-  TextField,
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
-  CircularProgress,
-  Button,
-} from "@material-ui/core";
+import { TextField, CircularProgress, Button } from "@material-ui/core";
 
 //api
-import FormsApi from "../../api/api";
+import FormsApi from "../../../api/api";
 
 //dependences
 import { useState } from "react";
-import { Base64 } from "js-base64";
-import { Link } from "react-router-dom";
 
 function Login() {
-  const [rememberMe, setRememberMe] = useState(true);
   const [apiFeedBackError, setApiFeedBackError] = useState(false);
   const [submit, setSubmit] = useState(false);
 
@@ -38,7 +28,7 @@ function Login() {
       _fcontent[key] = value;
     });
     let api = new FormsApi();
-    let res = await api.post("/seller/login", _fcontent);
+    let res = await api.post("/admin/sign_in", _fcontent);
     if (res === "Error") {
       setApiFeedBackError(true);
       setSubmit(false);
@@ -48,53 +38,24 @@ function Login() {
       setApiFeedBackError(true);
       setSubmit(false);
     } else {
-      if (rememberMe) {
-        const data = Base64.encode(
-          JSON.stringify({ ...res.user, role: res.role })
-        );
-        localStorage.setItem("token", data);
-        setSubmit(false);
-        window.location.reload();
-      } else {
-        const data = Base64.encode(
-          JSON.stringify({ ...res.user, role: res.role })
-        );
-        sessionStorage.setItem("token", data);
-        setSubmit(false);
-        window.location.reload();
-      }
+      sessionStorage.setItem("token", "admin");
+      setSubmit(false);
+      window.location.reload();
     }
   };
   return (
     <div className="login_ctr">
       <div>
-        <img src={SellerImg} alt="Sell on plus" />
-      </div>
-      <div>
         <div className="form_ctr card">
           <form onSubmit={form_submit} className="login_form">
             <div className="login-logo-ctr">
-              <img src={LOGO} alt="PLUSONLINE" />
+              <img src={LOGO} alt="LYTE" />
             </div>
             <div className="login-inputs-ctr">
               <TextField
                 error={apiFeedBackError}
                 helperText={
-                  apiFeedBackError
-                    ? "Wrong Phone number or some network error"
-                    : ""
-                }
-                variant="outlined"
-                label="Phone Number"
-                type="text"
-                name="id"
-                fullWidth
-                style={{ margin: "20px 0px" }}
-              />
-              <TextField
-                error={apiFeedBackError}
-                helperText={
-                  apiFeedBackError ? "Wrong Password or some network error" : ""
+                  apiFeedBackError ? "Put in correct things boss" : ""
                 }
                 variant="outlined"
                 label="Password"
@@ -103,21 +64,6 @@ function Login() {
                 fullWidth
                 style={{ margin: "20px 0px" }}
               />
-              <FormGroup>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      color="primary"
-                      name="rem_me"
-                      checked={rememberMe}
-                      onChange={() => {
-                        setRememberMe(!rememberMe);
-                      }}
-                    />
-                  }
-                  label="Remember Me On this Device"
-                />
-              </FormGroup>
             </div>
 
             <div className="login-btn-ctr">
@@ -138,20 +84,6 @@ function Login() {
                 {submit ? "Please Wait..." : "Submit"}
               </Button>
             </div>
-            <div>
-              Not Registered?
-              <Link to="/register">
-                <span
-                  style={{
-                    textDecoration: "underline",
-                    color: "blue",
-                    marginLeft: "5px",
-                  }}
-                >
-                  Register Here
-                </span>
-              </Link>
-            </div>
           </form>
         </div>
       </div>
@@ -160,13 +92,3 @@ function Login() {
 }
 
 export default Login;
-
-export function Logout() {
-  const token_stored = localStorage.getItem("token");
-  if (token_stored) {
-    localStorage.removeItem("token");
-  } else {
-    sessionStorage.removeItem("token");
-  }
-  window.location.replace("/");
-}

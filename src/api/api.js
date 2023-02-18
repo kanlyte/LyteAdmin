@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// const url = "http://127.0.0.1:8000/api"; //local
-const url = "https://plusapi.herokuapp.com/api"; //heroku
+const url = "http://127.0.0.1:8000"; //local
+// const url = "https://api.lyte.kanlyte.com/api"; //cloud
 
 export default class FormsApi {
   //post requests

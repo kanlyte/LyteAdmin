@@ -20,11 +20,7 @@
   height: 100%;
   width: 100%;
 }
-.form_ctr {
-  height: 75%;
-}
 .login_form {
-  height: 90%;
   width: 80%;
   margin: 5% auto;
   border-radius: 5px;
@@ -35,6 +31,7 @@
 }
 .login-inputs-ctr {
   flex: 2;
+  width: 100%;
 }
 .login-btn-ctr {
   flex: 1;
