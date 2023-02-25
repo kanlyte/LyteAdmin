@@ -55,7 +55,9 @@ function Login() {
               <TextField
                 error={apiFeedBackError}
                 helperText={
-                  apiFeedBackError ? "Put in correct things boss" : ""
+                  apiFeedBackError
+                    ? "Put in correct things boss If you think password is correct, then check your internet"
+                    : ""
                 }
                 variant="outlined"
                 label="Password"

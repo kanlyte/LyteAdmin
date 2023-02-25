@@ -39,6 +39,18 @@ export default (props) => {
               <span>Application</span>
             </div>
           </Link>
+          <Link to="/managers">
+            <div
+              className={
+                props.active === "managers"
+                  ? "sidebar-link active"
+                  : "sidebar-link"
+              }
+            >
+              <i className="las la-globe"></i>
+              <span>Managers</span>
+            </div>
+          </Link>
         </div>
       </div>
     </div>

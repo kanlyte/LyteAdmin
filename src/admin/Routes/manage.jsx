@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
  * components
  *
  */
-import { UploadSingle } from "../../api/files";
 import TopBar from "../Components/Topbar/topbar";
 import SideNav from "../Components/sidebar/sidebar";
 import FormsApi from "../../api/api";
@@ -29,42 +28,40 @@ import "./designs/app_manager.css";
 
 export default () => {
   const [state, setState] = useState({
-    categories: [],
-    sub_categories: [],
-    selected_category: "",
-    active_category: "",
-    active_sub_category: "",
-    category_button_active: false,
-    sub_category_button_active: false,
+    districts: [],
+    locations: [],
+    selected_district: "",
+    active_district: "",
+    active_location: "",
     mui: { snackBarPosition: { vertical: "top", horizontal: "right" } },
-    temp_category: "",
-    temp_sub_category: "",
+    temp_district: "",
+    temp_location: "",
   });
 
-  //for selecting a category
-  const changeSelectCategory = (event) => {
-    setState({ ...state, selected_category: event.target.value });
+  //for selecting a district
+  const changeSelectDistrict = (event) => {
+    setState({ ...state, selected_district: event.target.value });
   };
 
-  //load sub-categories and categories
+  //load locations and districts
   useEffect(() => {
     (async () => {
-      const categories = await new FormsApi().get("/category/all");
-      const sub_categories = await new FormsApi().get("/sub-category/all");
-      if (categories !== "Error" && sub_categories !== "Error") {
-        if (categories.status !== false && sub_categories.status !== false) {
+      const districts = await new FormsApi().get("/admin/district/all");
+      const locations = await new FormsApi().get("/admin/location/all");
+      if (districts !== "Error" && locations !== "Error") {
+        if (districts.status !== false && locations.status !== false) {
           setState({
             ...state,
-            categories: categories.result,
-            sub_categories: sub_categories.result,
+            districts: districts.result,
+            locations: locations.result,
           });
         }
       }
     })();
   }, []);
 
-  //for category submit
-  const form_category_submit = async (e) => {
+  //for district submit
+  const form_district_submit = async (e) => {
     e.preventDefault();
     setState({
       ...state,
@@ -80,13 +77,12 @@ export default () => {
     formDataInstance.forEach((v, i) => {
       contentObj[i] = v;
     });
-    if (state.active_category) {
-      contentObj["id"] = state.active_category.id;
+    if (state.active_district) {
+      contentObj["_id"] = state.active_district._id;
       contentObj["edit"] = true;
     }
-    if (state.category_image) contentObj["image_url"] = state.category_image;
     let formsApi = new FormsApi();
-    let res = await formsApi.post("/category/new", contentObj);
+    let res = await formsApi.post("/admin/district/new", contentObj);
     if (res === "Error") {
       setState({
         ...state,
@@ -106,7 +102,7 @@ export default () => {
           ...state,
           mui: {
             ...state.mui,
-            snackBarMessage: res.data,
+            snackBarMessage: "Some Error Papa",
             snackBarStatus: "warning",
             snackBarOpen: true,
           },
@@ -119,7 +115,7 @@ export default () => {
           ...state,
           mui: {
             ...state.mui,
-            snackBarMessage: res.data,
+            snackBarMessage: "Done",
             snackBarStatus: "success",
             snackBarOpen: true,
           },
@@ -131,8 +127,8 @@ export default () => {
     }
   };
 
-  // for sub-category submit
-  const form_sub_category_submit = async (e) => {
+  // form location submit
+  const form_location_submit = async (e) => {
     e.preventDefault();
     setState({
       ...state,
@@ -148,15 +144,12 @@ export default () => {
     formDataInstance.forEach((v, i) => {
       contentObj[i] = v;
     });
-    if (state.active_sub_category) {
-      contentObj["id"] = state.active_sub_category.sub_category_id;
+    if (state.active_location) {
+      contentObj["_id"] = state.active_location._id;
       contentObj["edit"] = true;
     }
-    if (state.sub_category_image)
-      contentObj["image_url"] = state.sub_category_image;
-
     let formsApi = new FormsApi();
-    let res = await formsApi.post("/sub-category/new", contentObj);
+    let res = await formsApi.post("/admin/location/new", contentObj);
     if (res === "Error") {
       setState({
         ...state,
@@ -176,7 +169,7 @@ export default () => {
           ...state,
           mui: {
             ...state.mui,
-            snackBarMessage: res.data,
+            snackBarMessage: "Some Error papa",
             snackBarStatus: "warning",
             snackBarOpen: true,
           },
@@ -189,7 +182,7 @@ export default () => {
           ...state,
           mui: {
             ...state.mui,
-            snackBarMessage: "Sub Category Added",
+            snackBarMessage: "Done",
             snackBarStatus: "success",
             snackBarOpen: true,
           },
@@ -198,30 +191,6 @@ export default () => {
           window.location.reload();
         }, 2000);
       }
-    }
-  };
-
-  //deleting sub-category
-  const handleDeleteListItem = async (e) => {};
-
-  /**
-   *
-   *
-   * updates the for images upload
-   */
-  const updateButton = (type, url) => {
-    if (type === "category") {
-      setState({
-        ...state,
-        category_button_active: true,
-        category_image: url,
-      });
-    } else {
-      setState({
-        ...state,
-        sub_category_button_active: true,
-        sub_category_image: url,
-      });
     }
   };
 
@@ -269,46 +238,46 @@ export default () => {
           <div className="main-ctr card">
             <div className="pdts-header-btns">
               <div>
-                <h2>Application Manager</h2>
+                <h2>Districts &amp; Locations</h2>
               </div>
               <div>
-                <Button variant="outlined" color="primary">
-                  Actions
-                </Button>
+                <Link to="/">
+                  <Button variant="outlined" color="primary">
+                    Back
+                  </Button>
+                </Link>
               </div>
             </div>
             <div className="app-manager-ctr">
               <div>
                 <div className="manage-comp-ctr">
-                  <h4 style={{ marginBlock: 5 }}>Plus Categories</h4>
+                  <h4 style={{ marginBlock: 5 }}>Districts</h4>
                   <div className="manage-tbl-ctr">
                     <table>
                       <thead>
                         <tr>
                           <th>No.</th>
-                          <th>Category Name</th>
-                          <th>Ranked</th>
+                          <th>Name</th>
                           <th></th>
                         </tr>
                       </thead>
                       <tbody>
-                        {state.categories.length === 0 ? (
+                        {state.districts.length === 0 ? (
                           <tr>
                             <td>...</td>
                           </tr>
                         ) : (
-                          state.categories.map((v, i) => {
+                          state.districts.map((v, i) => {
                             return (
                               <tr key={i}>
                                 <td>{i + 1}</td>
-                                <td>{v.category_name}</td>
-                                <td>{v.home_page_rank}</td>
+                                <td>{v.district_name}</td>
                                 <td>
                                   <Button
                                     onClick={() => {
                                       setState({
                                         ...state,
-                                        active_category: v,
+                                        active_district: v,
                                       });
                                     }}
                                   >
@@ -324,36 +293,37 @@ export default () => {
                   </div>
                 </div>
                 <div className="manage-comp-ctr">
-                  <h4 style={{ marginBlock: 5 }}>Plus Sub. Categories</h4>
+                  <h4 style={{ marginBlock: 5 }}>Locations</h4>
                   <div>
                     <div className="manage-tbl-ctr">
                       <table>
                         <thead>
                           <tr>
                             <th>No.</th>
-                            <th>Category</th>
-                            <th>Sub Category</th>
+                            <th>District</th>
+                            <th>Location</th>
                             <th></th>
                           </tr>
                         </thead>
                         <tbody>
-                          {state.sub_categories.length === 0 ? (
+                          {state.locations.length === 0 ? (
                             <tr>
                               <td>....</td>
                             </tr>
                           ) : (
-                            state.sub_categories.map((v, i) => {
+                            state.locations.map((v, i) => {
                               return (
                                 <tr key={i}>
                                   <td>{i + 1}</td>
-                                  <td>{v.category}</td>
-                                  <td>{v.sub_category_name}</td>
+                                  <td>{v.district_name}</td>
+                                  <td>{v.location_name}</td>
                                   <td>
                                     <Button
                                       onClick={(e) => {
                                         setState({
                                           ...state,
-                                          active_sub_category: v,
+                                          active_location: v,
+                                          selected_district: v.district_name,
                                         });
                                       }}
                                     >
@@ -372,63 +342,36 @@ export default () => {
               </div>
               <div>
                 <div className="manage-comp-ctr">
-                  <div style={{ marginBlock: 10 }}>New Catergory</div>
-                  <UploadSingle
-                    type="category"
-                    onSuccess={updateButton}
-                    image_url={state.active_category.category_image || null}
-                  />
+                  <div style={{ marginBlock: 10 }}>New District</div>
                   <form
                     className="manage-comp-ctr-fields"
-                    onSubmit={form_category_submit}
+                    onSubmit={form_district_submit}
                   >
                     <TextField
                       variant="outlined"
                       color="primary"
-                      label="Catergory Name"
-                      name="category_name"
+                      label="District Name"
+                      name="district_name"
                       onChange={(e) => {
-                        setState({
-                          ...state,
-                          active_category: state.active_category
-                            ? {
-                                ...state.active_category,
-                                category_name: e.target.value,
-                              }
-                            : "",
-                        });
+                        if (state.active_district) {
+                          setState({
+                            ...state,
+                            active_district: {
+                              ...state.active_district,
+                              district_name: e.target.value,
+                            },
+                          });
+                        } else {
+                          setState({
+                            ...state,
+                            temp_district: e.target.value,
+                          });
+                        }
                       }}
                       value={
-                        state.active_category
-                          ? state.active_category.category_name
-                          : ""
-                      }
-                      required
-                    />
-                    <TextField
-                      type="number"
-                      variant="outlined"
-                      color="primary"
-                      label="Home Page Rank"
-                      name="home_page_rank"
-                      onChange={(e) => {
-                        state.active_category
-                          ? setState({
-                              ...state,
-                              active_category: {
-                                ...state.active_category,
-                                home_page_rank: e.target.value,
-                              },
-                            })
-                          : setState({
-                              ...state,
-                              temp_category: e.target.value,
-                            });
-                      }}
-                      value={
-                        state.active_category
-                          ? state.active_category.home_page_rank
-                          : state.temp_category
+                        state.active_district
+                          ? state.active_district.district_name
+                          : state.temp_district
                       }
                       required
                     />
@@ -439,36 +382,30 @@ export default () => {
                   </form>
                 </div>
                 <div className="manage-comp-ctr">
-                  <div style={{ marginBlock: 10 }}>New Sub. Category</div>
-                  <UploadSingle
-                    type="sub_category"
-                    onSuccess={updateButton}
-                    image_url={
-                      state.active_sub_category.sub_category_image || null
-                    }
-                  />
+                  <div style={{ marginBlock: 10 }}>New Location</div>
+
                   <form
                     className="manage-comp-ctr-fields"
-                    onSubmit={form_sub_category_submit}
+                    onSubmit={form_location_submit}
                   >
                     <FormControl fullWidth>
-                      <InputLabel id="select-category-label">
-                        Select Category
+                      <InputLabel id="select-district-label">
+                        Select District
                       </InputLabel>
                       <Select
-                        labelId="select-category-label"
-                        value={state.selected_category}
-                        label="Select Category"
-                        onChange={changeSelectCategory}
-                        name="category_id"
+                        labelId="select-district-label"
+                        value={state.selected_district}
+                        label="Select District"
+                        onChange={changeSelectDistrict}
+                        name="district_name"
                         required
                       >
-                        {state.categories.length === 0 ? (
-                          <MenuItem value="">No Categories</MenuItem>
+                        {state.districts.length === 0 ? (
+                          <MenuItem value="">No Districts</MenuItem>
                         ) : (
-                          state.categories.map((v, i) => (
-                            <MenuItem key={i} value={v.id}>
-                              {v.category_name}
+                          state.districts.map((v, i) => (
+                            <MenuItem key={i} value={v.district_name}>
+                              {v.district_name}
                             </MenuItem>
                           ))
                         )}
@@ -477,27 +414,29 @@ export default () => {
                     <TextField
                       variant="outlined"
                       color="primary"
-                      label="Sub Catergory Name"
-                      name="sub_category_name"
+                      label="Location Name"
+                      name="location_name"
                       required
                       onChange={(e) => {
-                        state.active_sub_category
-                          ? setState({
-                              ...state,
-                              active_sub_category: {
-                                ...state.active_sub_category,
-                                subcategory: e.target.value,
-                              },
-                            })
-                          : setState({
-                              ...state,
-                              temp_sub_category: e.target.value,
-                            });
+                        if (state.active_location) {
+                          setState({
+                            ...state,
+                            active_location: {
+                              ...state.active_location,
+                              location_name: e.target.value,
+                            },
+                          });
+                        } else {
+                          setState({
+                            ...state,
+                            temp_location: e.target.value,
+                          });
+                        }
                       }}
                       value={
-                        state.active_sub_category
-                          ? state.active_sub_category.subcategory
-                          : state.temp_sub_category
+                        state.active_location
+                          ? state.active_location.location_name
+                          : state.temp_location
                       }
                     />
 
