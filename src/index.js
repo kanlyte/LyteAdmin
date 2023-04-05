@@ -22,12 +22,4 @@ const AppWithTheme = () => (
   </MuiThemeProvider>
 );
 
-// const store = createStore(reducers, compose(applyMiddleware(thunk)));
-
-// const ReduxApp = () => (
-//   <Provider store={store}>
-//     <AppWithTheme />
-//   </Provider>
-// );
-
 ReactDom.render(<AppWithTheme />, document.getElementById("app"));

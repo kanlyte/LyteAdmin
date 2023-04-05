@@ -1,5 +1,4 @@
-import react, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import react, { useState } from "react";
 
 /**
  * components
@@ -9,42 +8,13 @@ import SideNav from "../Components/sidebar/sidebar";
 import FormsApi from "../../api/api";
 
 /**
- *
- * material
- */
-import { Button } from "@material-ui/core";
-
-/**
  * component styling
  */
 import "./designs/home.css";
 
 export default () => {
-  const [state, setState] = useState({
-    product_reqs: [],
-    pending_orders: [],
-    cleared_orders: [],
-  });
-  useEffect(() => {
-    (async () => {
-      const res = await new FormsApi().get("/orders/all");
-      const reqs = await new FormsApi().get("/admin/product_requests");
-      if (res !== "Error" && res.status) {
-        if (reqs !== "Error" && reqs.status) {
-          setState({
-            ...state,
-            product_reqs: reqs.result,
-            pending_orders: res.result.filter(
-              (el) => el.order_status === "pending"
-            ),
-            cleared_orders: res.result.filter(
-              (el) => el.order_status !== "pending"
-            ),
-          });
-        }
-      }
-    })();
-  }, []);
+  const [state, setState] = useState({});
+
   return (
     <>
       <TopBar />

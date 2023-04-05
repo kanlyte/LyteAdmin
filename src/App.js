@@ -10,7 +10,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // Components
 import user from "./app.config";
-import Login from "./admin/Components/login/login";
+import Login from "./login/login";
 import Admin from "./admin/index";
 import NotFound from "./admin/Components/NotFound/404";
 

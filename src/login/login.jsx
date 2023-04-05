@@ -1,16 +1,15 @@
 //styles
 import "./login.css";
-import "../../../Designs/main.css";
+import "../Designs/main.css";
 
 //assets
-import LOGO from "../../../assets/logos/lyte.png";
-import SellerImg from "../../../assets/sell.jpg";
+import LOGO from "../assets/logos/lyte.png";
 
 //material
 import { TextField, CircularProgress, Button } from "@material-ui/core";
 
 //api
-import FormsApi from "../../../api/api";
+import FormsApi from "../api/api";
 
 //dependences
 import { useState } from "react";
