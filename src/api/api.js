@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const url = "http://127.0.0.1:8000"; //local
-// const url = "https://api.lyte.kanlyte.com"; //cloud
+// const url = "http://127.0.0.1:8000"; //local
+const url = "https://api.lyte.kanlyte.com"; //cloud
 
 export default class FormsApi {
   //post requests
