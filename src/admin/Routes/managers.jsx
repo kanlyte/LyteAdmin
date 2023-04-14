@@ -12,15 +12,7 @@ import FormsApi from "../../api/api";
 
 //material
 import { Button, TextField, Snackbar, IconButton } from "@material-ui/core";
-import { Close } from "@material-ui/icons";
-import {
-  Alert as MuiAlert,
-  Slide,
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
-} from "@mui/material";
+import { Alert as MuiAlert, Slide, Checkbox } from "@mui/material";
 
 //styling
 import "./designs/products.css";
@@ -30,6 +22,7 @@ export default () => {
   const [state, setState] = useState({
     managers: [],
     search_pattern: "",
+    show_not_confirmed: false,
     mui: { snackBarPosition: { vertical: "top", horizontal: "right" } },
   });
 
@@ -107,7 +100,14 @@ export default () => {
             <div className="app-manager-ctr">
               <div>
                 <div className="manage-comp-ctr">
-                  <div style={{ marginBlock: 5 }}>
+                  <div
+                    style={{
+                      marginBlock: 5,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
                     <TextField
                       placeholder="Search Managers Here..."
                       type="search"
@@ -120,6 +120,19 @@ export default () => {
                         });
                       }}
                     />
+
+                    <div>
+                      <Checkbox
+                        title="Show Not Confirmed Only"
+                        onChange={() => {
+                          setState({
+                            ...state,
+                            show_not_confirmed: !state.show_not_confirmed,
+                          });
+                        }}
+                      />
+                      <span>Show Not Confirmed Only</span>
+                    </div>
                   </div>
                   <div className="manage-tbl-ctr">
                     <table>
@@ -127,7 +140,7 @@ export default () => {
                         <tr>
                           <th>No.</th>
                           <th>Name</th>
-                          <th>Phone Nunber</th>
+                          <th>Phone Number</th>
                           <th></th>
                         </tr>
                       </thead>
@@ -136,6 +149,154 @@ export default () => {
                           <tr>
                             <td>...</td>
                           </tr>
+                        ) : state.show_not_confirmed && state.search_pattern ? (
+                          state.managers
+                            .filter((el) =>
+                              el.manager_name
+                                .toLowerCase()
+                                .includes(state.search_pattern.toLowerCase())
+                            )
+                            .filter((el) => !el.confirmed)
+                            .map((v, i) => {
+                              return (
+                                <tr key={i}>
+                                  <td>{i + 1}</td>
+                                  <td>{v.manager_name}</td>
+                                  <td>{v.phone_number}</td>
+                                  <td>
+                                    <Button
+                                      variant="contained"
+                                      color={
+                                        v.confirmed ? "primary" : "secondary"
+                                      }
+                                      onClick={async () => {
+                                        if (v.confirmed) {
+                                          setState({
+                                            ...state,
+                                            mui: {
+                                              ...state.mui,
+                                              snackBarMessage:
+                                                "Please Wait....",
+                                              snackBarStatus: "info",
+                                              snackBarOpen: true,
+                                            },
+                                          });
+                                          let formsApi = new FormsApi();
+                                          let res = await formsApi.put(
+                                            `/auth/manager/edit/${v._id}`
+                                          );
+                                          if (res === "Error") {
+                                            setState({
+                                              ...state,
+                                              mui: {
+                                                ...state.mui,
+                                                snackBarMessage:
+                                                  "Some Network error",
+                                                snackBarStatus: "warning",
+                                                snackBarOpen: true,
+                                              },
+                                            });
+                                            setTimeout(() => {
+                                              window.location.reload();
+                                            }, 2000);
+                                          } else {
+                                            if (res.status === false) {
+                                              setState({
+                                                ...state,
+                                                mui: {
+                                                  ...state.mui,
+                                                  snackBarMessage:
+                                                    "Some Error Papa",
+                                                  snackBarStatus: "warning",
+                                                  snackBarOpen: true,
+                                                },
+                                              });
+                                              setTimeout(() => {
+                                                window.location.reload();
+                                              }, 2000);
+                                            } else {
+                                              setState({
+                                                ...state,
+                                                mui: {
+                                                  ...state.mui,
+                                                  snackBarMessage: "Done",
+                                                  snackBarStatus: "success",
+                                                  snackBarOpen: true,
+                                                },
+                                              });
+                                              setTimeout(() => {
+                                                window.location.reload();
+                                              }, 2000);
+                                            }
+                                          }
+                                        } else {
+                                          setState({
+                                            ...state,
+                                            mui: {
+                                              ...state.mui,
+                                              snackBarMessage:
+                                                "Please Wait....",
+                                              snackBarStatus: "info",
+                                              snackBarOpen: true,
+                                            },
+                                          });
+                                          let formsApi = new FormsApi();
+                                          let res = await formsApi.put(
+                                            `/auth/manager/edit/${v._id}?auth=$admin123*`
+                                          );
+                                          if (res === "Error") {
+                                            setState({
+                                              ...state,
+                                              mui: {
+                                                ...state.mui,
+                                                snackBarMessage:
+                                                  "Some Network error",
+                                                snackBarStatus: "warning",
+                                                snackBarOpen: true,
+                                              },
+                                            });
+                                            setTimeout(() => {
+                                              window.location.reload();
+                                            }, 2000);
+                                          } else {
+                                            if (res.status === false) {
+                                              setState({
+                                                ...state,
+                                                mui: {
+                                                  ...state.mui,
+                                                  snackBarMessage:
+                                                    "Some Error Papa",
+                                                  snackBarStatus: "warning",
+                                                  snackBarOpen: true,
+                                                },
+                                              });
+                                              setTimeout(() => {
+                                                window.location.reload();
+                                              }, 2000);
+                                            } else {
+                                              setState({
+                                                ...state,
+                                                mui: {
+                                                  ...state.mui,
+                                                  snackBarMessage: "Done",
+                                                  snackBarStatus: "success",
+                                                  snackBarOpen: true,
+                                                },
+                                              });
+                                              setTimeout(() => {
+                                                window.location.reload();
+                                              }, 2000);
+                                            }
+                                          }
+                                        }
+                                      }}
+                                    >
+                                      {v.confirmed ? "Confirmed" : "Confirm"}
+                                    </Button>
+                                  </td>
+                                </tr>
+                              );
+                            })
                         ) : state.search_pattern ? (
                           state.managers
                             .filter((el) =>
@@ -156,7 +317,349 @@ export default () => {
                                         v.confirmed ? "primary" : "secondary"
                                       }
                                       onClick={async () => {
-                                        if (v.confirmed) return;
+                                        if (v.confirmed) {
+                                          setState({
+                                            ...state,
+                                            mui: {
+                                              ...state.mui,
+                                              snackBarMessage:
+                                                "Please Wait....",
+                                              snackBarStatus: "info",
+                                              snackBarOpen: true,
+                                            },
+                                          });
+                                          let formsApi = new FormsApi();
+                                          let res = await formsApi.put(
+                                            `/auth/manager/edit/${v._id}`
+                                          );
+                                          if (res === "Error") {
+                                            setState({
+                                              ...state,
+                                              mui: {
+                                                ...state.mui,
+                                                snackBarMessage:
+                                                  "Some Network error",
+                                                snackBarStatus: "warning",
+                                                snackBarOpen: true,
+                                              },
+                                            });
+                                            setTimeout(() => {
+                                              window.location.reload();
+                                            }, 2000);
+                                          } else {
+                                            if (res.status === false) {
+                                              setState({
+                                                ...state,
+                                                mui: {
+                                                  ...state.mui,
+                                                  snackBarMessage:
+                                                    "Some Error Papa",
+                                                  snackBarStatus: "warning",
+                                                  snackBarOpen: true,
+                                                },
+                                              });
+                                              setTimeout(() => {
+                                                window.location.reload();
+                                              }, 2000);
+                                            } else {
+                                              setState({
+                                                ...state,
+                                                mui: {
+                                                  ...state.mui,
+                                                  snackBarMessage: "Done",
+                                                  snackBarStatus: "success",
+                                                  snackBarOpen: true,
+                                                },
+                                              });
+                                              setTimeout(() => {
+                                                window.location.reload();
+                                              }, 2000);
+                                            }
+                                          }
+                                        } else {
+                                          setState({
+                                            ...state,
+                                            mui: {
+                                              ...state.mui,
+                                              snackBarMessage:
+                                                "Please Wait....",
+                                              snackBarStatus: "info",
+                                              snackBarOpen: true,
+                                            },
+                                          });
+                                          let formsApi = new FormsApi();
+                                          let res = await formsApi.put(
+                                            `/auth/manager/edit/${v._id}?auth=$admin123*`
+                                          );
+                                          if (res === "Error") {
+                                            setState({
+                                              ...state,
+                                              mui: {
+                                                ...state.mui,
+                                                snackBarMessage:
+                                                  "Some Network error",
+                                                snackBarStatus: "warning",
+                                                snackBarOpen: true,
+                                              },
+                                            });
+                                            setTimeout(() => {
+                                              window.location.reload();
+                                            }, 2000);
+                                          } else {
+                                            if (res.status === false) {
+                                              setState({
+                                                ...state,
+                                                mui: {
+                                                  ...state.mui,
+                                                  snackBarMessage:
+                                                    "Some Error Papa",
+                                                  snackBarStatus: "warning",
+                                                  snackBarOpen: true,
+                                                },
+                                              });
+                                              setTimeout(() => {
+                                                window.location.reload();
+                                              }, 2000);
+                                            } else {
+                                              setState({
+                                                ...state,
+                                                mui: {
+                                                  ...state.mui,
+                                                  snackBarMessage: "Done",
+                                                  snackBarStatus: "success",
+                                                  snackBarOpen: true,
+                                                },
+                                              });
+                                              setTimeout(() => {
+                                                window.location.reload();
+                                              }, 2000);
+                                            }
+                                          }
+                                        }
+                                      }}
+                                    >
+                                      {v.confirmed ? "Confirmed" : "Confirm"}
+                                    </Button>
+                                  </td>
+                                </tr>
+                              );
+                            })
+                        ) : state.show_not_confirmed ? (
+                          state.managers
+                            .filter((el) => !el.confirmed)
+                            .map((v, i) => {
+                              return (
+                                <tr key={i}>
+                                  <td>{i + 1}</td>
+                                  <td>{v.manager_name}</td>
+                                  <td>{v.phone_number}</td>
+                                  <td>
+                                    <Button
+                                      variant="contained"
+                                      color={
+                                        v.confirmed ? "primary" : "secondary"
+                                      }
+                                      onClick={async () => {
+                                        if (v.confirmed) {
+                                          setState({
+                                            ...state,
+                                            mui: {
+                                              ...state.mui,
+                                              snackBarMessage:
+                                                "Please Wait....",
+                                              snackBarStatus: "info",
+                                              snackBarOpen: true,
+                                            },
+                                          });
+                                          let formsApi = new FormsApi();
+                                          let res = await formsApi.put(
+                                            `/auth/manager/edit/${v._id}`
+                                          );
+                                          if (res === "Error") {
+                                            setState({
+                                              ...state,
+                                              mui: {
+                                                ...state.mui,
+                                                snackBarMessage:
+                                                  "Some Network error",
+                                                snackBarStatus: "warning",
+                                                snackBarOpen: true,
+                                              },
+                                            });
+                                            setTimeout(() => {
+                                              window.location.reload();
+                                            }, 2000);
+                                          } else {
+                                            if (res.status === false) {
+                                              setState({
+                                                ...state,
+                                                mui: {
+                                                  ...state.mui,
+                                                  snackBarMessage:
+                                                    "Some Error Papa",
+                                                  snackBarStatus: "warning",
+                                                  snackBarOpen: true,
+                                                },
+                                              });
+                                              setTimeout(() => {
+                                                window.location.reload();
+                                              }, 2000);
+                                            } else {
+                                              setState({
+                                                ...state,
+                                                mui: {
+                                                  ...state.mui,
+                                                  snackBarMessage: "Done",
+                                                  snackBarStatus: "success",
+                                                  snackBarOpen: true,
+                                                },
+                                              });
+                                              setTimeout(() => {
+                                                window.location.reload();
+                                              }, 2000);
+                                            }
+                                          }
+                                        } else {
+                                          setState({
+                                            ...state,
+                                            mui: {
+                                              ...state.mui,
+                                              snackBarMessage:
+                                                "Please Wait....",
+                                              snackBarStatus: "info",
+                                              snackBarOpen: true,
+                                            },
+                                          });
+                                          let formsApi = new FormsApi();
+                                          let res = await formsApi.put(
+                                            `/auth/manager/edit/${v._id}?auth=$admin123*`
+                                          );
+                                          if (res === "Error") {
+                                            setState({
+                                              ...state,
+                                              mui: {
+                                                ...state.mui,
+                                                snackBarMessage:
+                                                  "Some Network error",
+                                                snackBarStatus: "warning",
+                                                snackBarOpen: true,
+                                              },
+                                            });
+                                            setTimeout(() => {
+                                              window.location.reload();
+                                            }, 2000);
+                                          } else {
+                                            if (res.status === false) {
+                                              setState({
+                                                ...state,
+                                                mui: {
+                                                  ...state.mui,
+                                                  snackBarMessage:
+                                                    "Some Error Papa",
+                                                  snackBarStatus: "warning",
+                                                  snackBarOpen: true,
+                                                },
+                                              });
+                                              setTimeout(() => {
+                                                window.location.reload();
+                                              }, 2000);
+                                            } else {
+                                              setState({
+                                                ...state,
+                                                mui: {
+                                                  ...state.mui,
+                                                  snackBarMessage: "Done",
+                                                  snackBarStatus: "success",
+                                                  snackBarOpen: true,
+                                                },
+                                              });
+                                              setTimeout(() => {
+                                                window.location.reload();
+                                              }, 2000);
+                                            }
+                                          }
+                                        }
+                                      }}
+                                    >
+                                      {v.confirmed ? "Confirmed" : "Confirm"}
+                                    </Button>
+                                  </td>
+                                </tr>
+                              );
+                            })
+                        ) : (
+                          state.managers.map((v, i) => {
+                            return (
+                              <tr key={i}>
+                                <td>{i + 1}</td>
+                                <td>{v.manager_name}</td>
+                                <td>{v.phone_number}</td>
+                                <td>
+                                  <Button
+                                    variant="contained"
+                                    color={
+                                      v.confirmed ? "primary" : "secondary"
+                                    }
+                                    onClick={async () => {
+                                      if (v.confirmed) {
+                                        setState({
+                                          ...state,
+                                          mui: {
+                                            ...state.mui,
+                                            snackBarMessage: "Please Wait....",
+                                            snackBarStatus: "info",
+                                            snackBarOpen: true,
+                                          },
+                                        });
+                                        let formsApi = new FormsApi();
+                                        let res = await formsApi.put(
+                                          `/auth/manager/edit/${v._id}`
+                                        );
+                                        if (res === "Error") {
+                                          setState({
+                                            ...state,
+                                            mui: {
+                                              ...state.mui,
+                                              snackBarMessage:
+                                                "Some Network error",
+                                              snackBarStatus: "warning",
+                                              snackBarOpen: true,
+                                            },
+                                          });
+                                          setTimeout(() => {
+                                            window.location.reload();
+                                          }, 2000);
+                                        } else {
+                                          if (res.status === false) {
+                                            setState({
+                                              ...state,
+                                              mui: {
+                                                ...state.mui,
+                                                snackBarMessage:
+                                                  "Some Error Papa",
+                                                snackBarStatus: "warning",
+                                                snackBarOpen: true,
+                                              },
+                                            });
+                                            setTimeout(() => {
+                                              window.location.reload();
+                                            }, 2000);
+                                          } else {
+                                            setState({
+                                              ...state,
+                                              mui: {
+                                                ...state.mui,
+                                                snackBarMessage: "Done",
+                                                snackBarStatus: "success",
+                                                snackBarOpen: true,
+                                              },
+                                            });
+                                            setTimeout(() => {
+                                              window.location.reload();
+                                            }, 2000);
+                                          }
+                                        }
+                                      } else {
                                         setState({
                                           ...state,
                                           mui: {
@@ -213,85 +716,6 @@ export default () => {
                                               window.location.reload();
                                             }, 2000);
                                           }
-                                        }
-                                      }}
-                                    >
-                                      {v.confirmed ? "Confirmed" : "Confirm"}
-                                    </Button>
-                                  </td>
-                                </tr>
-                              );
-                            })
-                        ) : (
-                          state.managers.map((v, i) => {
-                            return (
-                              <tr key={i}>
-                                <td>{i + 1}</td>
-                                <td>{v.manager_name}</td>
-                                <td>{v.phone_number}</td>
-                                <td>
-                                  <Button
-                                    variant="contained"
-                                    color={
-                                      v.confirmed ? "primary" : "secondary"
-                                    }
-                                    onClick={async () => {
-                                      if (v.confirmed) return;
-                                      setState({
-                                        ...state,
-                                        mui: {
-                                          ...state.mui,
-                                          snackBarMessage: "Please Wait....",
-                                          snackBarStatus: "info",
-                                          snackBarOpen: true,
-                                        },
-                                      });
-                                      let formsApi = new FormsApi();
-                                      let res = await formsApi.put(
-                                        `/auth/manager/edit/${v._id}?auth=$admin123*`
-                                      );
-                                      if (res === "Error") {
-                                        setState({
-                                          ...state,
-                                          mui: {
-                                            ...state.mui,
-                                            snackBarMessage:
-                                              "Some Network error",
-                                            snackBarStatus: "warning",
-                                            snackBarOpen: true,
-                                          },
-                                        });
-                                        setTimeout(() => {
-                                          window.location.reload();
-                                        }, 2000);
-                                      } else {
-                                        if (res.status === false) {
-                                          setState({
-                                            ...state,
-                                            mui: {
-                                              ...state.mui,
-                                              snackBarMessage:
-                                                "Some Error Papa",
-                                              snackBarStatus: "warning",
-                                              snackBarOpen: true,
-                                            },
-                                          });
-                                          setTimeout(() => {
-                                            window.location.reload();
-                                          }, 2000);
-                                        } else {
-                                          setState({
-                                            ...state,
-                                            mui: {
-                                              ...state.mui,
-                                              snackBarMessage: "Done",
-                                              snackBarStatus: "success",
-                                              snackBarOpen: true,
-                                            },
-                                          });
-                                          setTimeout(() => {
-                                            window.location.reload();
-                                          }, 2000);
                                         }
                                       }
                                     }}

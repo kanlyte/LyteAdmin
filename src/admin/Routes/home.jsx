@@ -1,4 +1,4 @@
-import react, { useState } from "react";
+import react, { useEffect, useState } from "react";
 
 /**
  * components
@@ -13,7 +13,17 @@ import FormsApi from "../../api/api";
 import "./designs/home.css";
 
 export default () => {
-  const [state, setState] = useState({});
+  const [state, setState] = useState({ app_data: {}, issues: [] });
+
+  useEffect(() => {
+    (async () => {
+      let res = await new FormsApi().get("/admin/appdata");
+      if (res !== "Error" && res.status) {
+        console.log(res.result);
+        setState({ ...state, app_data: res.result, issues: res.result.issues });
+      }
+    })();
+  }, []);
 
   return (
     <>
@@ -31,7 +41,9 @@ export default () => {
                     <i className="las la-shipping-fast"></i>
                   </span>
                   <div className="">
-                    <div style={{ color: "#1A72E6" }}>121</div>
+                    <div style={{ color: "#1A72E6" }}>
+                      {state.app_data.properties || "..."}
+                    </div>
                     <div>Properties</div>
                   </div>
                 </div>
@@ -40,7 +52,9 @@ export default () => {
                     <i className="las la-users"></i>
                   </span>
                   <div className="">
-                    <div style={{ color: "#8884D8" }}>89</div>
+                    <div style={{ color: "#8884D8" }}>
+                      {state.app_data.managers || "..."}
+                    </div>
                     <div>Managers</div>
                   </div>
                 </div>
@@ -49,8 +63,10 @@ export default () => {
                     <i className="las la-user-tag"></i>
                   </span>
                   <div className="">
-                    <div style={{ color: "#0CA940" }}>89</div>
-                    <div>Connections Today</div>
+                    <div style={{ color: "#0CA940" }}>
+                      {state.app_data.interactions || "..."}
+                    </div>
+                    <div>Interactions</div>
                   </div>
                 </div>
                 <div className="dashboard-card">
@@ -58,8 +74,10 @@ export default () => {
                     <i className="las la-user-tag"></i>
                   </span>
                   <div className="">
-                    <div style={{ color: "#E0A70E" }}>89</div>
-                    <div>Locations</div>
+                    <div style={{ color: "#E0A70E" }}>
+                      {state.app_data.property_views || "..."}
+                    </div>
+                    <div>Property Views</div>
                   </div>
                 </div>
               </div>
@@ -69,8 +87,10 @@ export default () => {
                     <i className="las la-shipping-fast"></i>
                   </span>
                   <div className="">
-                    <div style={{ color: "#1A72E6" }}>121</div>
-                    <div>Properties</div>
+                    <div style={{ color: "#1A72E6" }}>
+                      {state.app_data.districts || "..."}
+                    </div>
+                    <div>Districts</div>
                   </div>
                 </div>
                 <div className="dashboard-card">
@@ -78,8 +98,10 @@ export default () => {
                     <i className="las la-users"></i>
                   </span>
                   <div className="">
-                    <div style={{ color: "#8884D8" }}>89</div>
-                    <div>Managers</div>
+                    <div style={{ color: "#8884D8" }}>
+                      {state.app_data.locations || "..."}
+                    </div>
+                    <div>Locations</div>
                   </div>
                 </div>
                 <div className="dashboard-card">
@@ -87,94 +109,54 @@ export default () => {
                     <i className="las la-user-tag"></i>
                   </span>
                   <div className="">
-                    <div style={{ color: "#0CA940" }}>89</div>
-                    <div>Connections Today</div>
+                    <div style={{ color: "#0CA940" }}>
+                      {state.app_data.pending_confirmation || "..."}
+                    </div>
+                    <div>Not Confirmed</div>
                   </div>
                 </div>
                 <div className="dashboard-card">
-                  <span style={{ color: "#1A72E6" }}>
+                  <span style={{ color: "#CC0000" }}>
                     <i className="las la-user-tag"></i>
                   </span>
                   <div className="">
-                    <div style={{ color: "#E0A70E" }}>89</div>
-                    <div>Locations</div>
+                    <div style={{ color: "#0CA940" }}>
+                      {state.issues.length}
+                    </div>
+                    <div>Issues</div>
                   </div>
                 </div>
               </div>
-              <div className="dashboard-cards">
-                <div className="dashboard-card">
-                  <span style={{ color: "#E0A70E" }}>
-                    <i className="las la-shipping-fast"></i>
-                  </span>
-                  <div className="">
-                    <div style={{ color: "#1A72E6" }}>121</div>
-                    <div>Properties</div>
-                  </div>
-                </div>
-                <div className="dashboard-card">
-                  <span style={{ color: "#0CA940" }}>
-                    <i className="las la-users"></i>
-                  </span>
-                  <div className="">
-                    <div style={{ color: "#8884D8" }}>89</div>
-                    <div>Managers</div>
-                  </div>
-                </div>
-                <div className="dashboard-card">
-                  <span style={{ color: "#CC0000" }}>
-                    <i className="las la-user-tag"></i>
-                  </span>
-                  <div className="">
-                    <div style={{ color: "#0CA940" }}>89</div>
-                    <div>Connections Today</div>
-                  </div>
-                </div>
-                <div className="dashboard-card">
-                  <span style={{ color: "#1A72E6" }}>
-                    <i className="las la-user-tag"></i>
-                  </span>
-                  <div className="">
-                    <div style={{ color: "#E0A70E" }}>89</div>
-                    <div>Locations</div>
-                  </div>
-                </div>
-              </div>
-              <div className="dashboard-cards">
-                <div className="dashboard-card">
-                  <span style={{ color: "#E0A70E" }}>
-                    <i className="las la-shipping-fast"></i>
-                  </span>
-                  <div className="">
-                    <div style={{ color: "#1A72E6" }}>121</div>
-                    <div>Properties</div>
-                  </div>
-                </div>
-                <div className="dashboard-card">
-                  <span style={{ color: "#0CA940" }}>
-                    <i className="las la-users"></i>
-                  </span>
-                  <div className="">
-                    <div style={{ color: "#8884D8" }}>89</div>
-                    <div>Managers</div>
-                  </div>
-                </div>
-                <div className="dashboard-card">
-                  <span style={{ color: "#CC0000" }}>
-                    <i className="las la-user-tag"></i>
-                  </span>
-                  <div className="">
-                    <div style={{ color: "#0CA940" }}>89</div>
-                    <div>Connections Today</div>
-                  </div>
-                </div>
-                <div className="dashboard-card">
-                  <span style={{ color: "#1A72E6" }}>
-                    <i className="las la-user-tag"></i>
-                  </span>
-                  <div className="">
-                    <div style={{ color: "#E0A70E" }}>89</div>
-                    <div>Locations</div>
-                  </div>
+              <div className="manage-comp-ctr">
+                <h4 style={{ marginBlock: 5 }}>Issues</h4>
+                <div className="manage-tbl-ctr">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>No.</th>
+                        <th>Issue Message</th>
+                        <th>Contact</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {state.issues.length === 0 ? (
+                        <tr>
+                          <td>...</td>
+                        </tr>
+                      ) : (
+                        state.issues.map((v, i) => {
+                          return (
+                            <tr key={i}>
+                              <td>{i + 1}</td>
+                              <td>{v.report_issue}</td>
+                              <td>{v.contact || "..."}</td>
+                              <td></td>
+                            </tr>
+                          );
+                        })
+                      )}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
