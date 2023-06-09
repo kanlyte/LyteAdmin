@@ -19,7 +19,6 @@ export default () => {
     (async () => {
       let res = await new FormsApi().get("/admin/appdata");
       if (res !== "Error" && res.status) {
-        console.log(res.result);
         setState({ ...state, app_data: res.result, issues: res.result.issues });
       }
     })();
