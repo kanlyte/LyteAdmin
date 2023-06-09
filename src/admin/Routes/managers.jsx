@@ -22,7 +22,7 @@ export default () => {
   const [state, setState] = useState({
     managers: [],
     search_pattern: "",
-    show_not_confirmed: false,
+    show_not_confirmed: true,
     mui: { snackBarPosition: { vertical: "top", horizontal: "right" } },
   });
 
@@ -123,7 +123,8 @@ export default () => {
 
                     <div>
                       <Checkbox
-                        title="Show Not Confirmed Only"
+                        title="Showing Not Confirmed Only"
+                        checked={true}
                         onChange={() => {
                           setState({
                             ...state,
@@ -131,7 +132,7 @@ export default () => {
                           });
                         }}
                       />
-                      <span>Show Not Confirmed Only</span>
+                      <span>Showing Not Confirmed Only</span>
                     </div>
                   </div>
                   <div className="manage-tbl-ctr">

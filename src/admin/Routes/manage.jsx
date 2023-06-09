@@ -30,6 +30,8 @@ export default () => {
   const [state, setState] = useState({
     districts: [],
     locations: [],
+    location_query: "",
+    district_query: "",
     selected_district: "",
     active_district: "",
     active_location: "",
@@ -251,7 +253,24 @@ export default () => {
             <div className="app-manager-ctr">
               <div>
                 <div className="manage-comp-ctr">
-                  <h4 style={{ marginBlock: 5 }}>Districts</h4>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <h4 style={{ marginBlock: 5 }}>Districts</h4>
+                    <TextField
+                      variant="outlined"
+                      color="primary"
+                      label="Search Districts Here"
+                      name="district_query"
+                      onChange={(e) => {
+                        setState({ ...state, district_query: e.target.value });
+                      }}
+                    />
+                  </div>
                   <div className="manage-tbl-ctr">
                     <table>
                       <thead>
@@ -266,8 +285,36 @@ export default () => {
                           <tr>
                             <td>...</td>
                           </tr>
+                        ) : state.district_query ? (
+                          state.districts
+                            .filter((el) =>
+                              el.district_name
+                                .toLowerCase()
+                                .includes(state.district_query.toLowerCase())
+                            )
+                            .slice(0, 10)
+                            .map((v, i) => {
+                              return (
+                                <tr key={i}>
+                                  <td>{i + 1}</td>
+                                  <td>{v.district_name}</td>
+                                  <td>
+                                    <Button
+                                      onClick={() => {
+                                        setState({
+                                          ...state,
+                                          active_district: v,
+                                        });
+                                      }}
+                                    >
+                                      Edit
+                                    </Button>
+                                  </td>
+                                </tr>
+                              );
+                            })
                         ) : (
-                          state.districts.map((v, i) => {
+                          state.districts.slice(0, 10).map((v, i) => {
                             return (
                               <tr key={i}>
                                 <td>{i + 1}</td>
@@ -293,7 +340,27 @@ export default () => {
                   </div>
                 </div>
                 <div className="manage-comp-ctr">
-                  <h4 style={{ marginBlock: 5 }}>Locations</h4>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <h4 style={{ marginBlock: 5 }}>Locations</h4>
+                    <TextField
+                      variant="outlined"
+                      color="primary"
+                      label="Search Locations Here"
+                      name="location_query"
+                      onChange={(e) => {
+                        setState({
+                          ...state,
+                          location_query: e.target.value,
+                        });
+                      }}
+                    />
+                  </div>
                   <div>
                     <div className="manage-tbl-ctr">
                       <table>
@@ -310,8 +377,38 @@ export default () => {
                             <tr>
                               <td>....</td>
                             </tr>
+                          ) : state.location_query ? (
+                            state.locations
+                              .filter((el) =>
+                                el.location_name
+                                  .toLowerCase()
+                                  .includes(state.location_query.toLowerCase())
+                              )
+                              .slice(0, 10)
+                              .map((v, i) => {
+                                return (
+                                  <tr key={i}>
+                                    <td>{i + 1}</td>
+                                    <td>{v.district_name}</td>
+                                    <td>{v.location_name}</td>
+                                    <td>
+                                      <Button
+                                        onClick={(e) => {
+                                          setState({
+                                            ...state,
+                                            active_location: v,
+                                            selected_district: v.district_name,
+                                          });
+                                        }}
+                                      >
+                                        Edit
+                                      </Button>
+                                    </td>
+                                  </tr>
+                                );
+                              })
                           ) : (
-                            state.locations.map((v, i) => {
+                            state.locations.slice(0, 10).map((v, i) => {
                               return (
                                 <tr key={i}>
                                   <td>{i + 1}</td>
