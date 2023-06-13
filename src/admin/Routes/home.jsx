@@ -13,13 +13,22 @@ import FormsApi from "../../api/api";
 import "./designs/home.css";
 
 export default () => {
-  const [state, setState] = useState({ app_data: {}, issues: [] });
+  const [state, setState] = useState({
+    app_data: {},
+    new_locations_coll: [],
+    issues: [],
+  });
 
   useEffect(() => {
     (async () => {
       let res = await new FormsApi().get("/admin/appdata");
       if (res !== "Error" && res.status) {
-        setState({ ...state, app_data: res.result, issues: res.result.issues });
+        setState({
+          ...state,
+          app_data: res.result,
+          issues: res.result.issues,
+          new_locations_coll: res.result.new_locations_coll,
+        });
       }
     })();
   }, []);
@@ -124,6 +133,41 @@ export default () => {
                     </div>
                     <div>Issues</div>
                   </div>
+                </div>
+              </div>
+              <div className="manage-comp-ctr">
+                <h4 style={{ marginBlock: 5 }}>New Locations</h4>
+                <div className="manage-tbl-ctr">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>No.</th>
+                        <th>District</th>
+                        <th>Location</th>
+                        <th>Manager Name</th>
+                        <th>Manager Contact</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {state.new_locations_coll.length === 0 ? (
+                        <tr>
+                          <td>...</td>
+                        </tr>
+                      ) : (
+                        state.new_locations_coll.map((v, i) => {
+                          return (
+                            <tr key={i}>
+                              <td>{i + 1}</td>
+                              <td>{v.district}</td>
+                              <td>{v.location}</td>
+                              <td>{v.manager_name}</td>
+                              <td>{v.phone_number}</td>
+                            </tr>
+                          );
+                        })
+                      )}
+                    </tbody>
+                  </table>
                 </div>
               </div>
               <div className="manage-comp-ctr">

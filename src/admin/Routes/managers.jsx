@@ -124,7 +124,7 @@ export default () => {
                     <div>
                       <Checkbox
                         title="Showing Not Confirmed Only"
-                        checked={true}
+                        checked={state.show_not_confirmed}
                         onChange={() => {
                           setState({
                             ...state,
