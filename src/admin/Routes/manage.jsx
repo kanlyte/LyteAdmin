@@ -38,11 +38,19 @@ export default () => {
     mui: { snackBarPosition: { vertical: "top", horizontal: "right" } },
     temp_district: "",
     temp_location: "",
+    temp_district_filter_locations: "",
   });
 
   //for selecting a district
   const changeSelectDistrict = (event) => {
     setState({ ...state, selected_district: event.target.value });
+  };
+  //for selecting a district to filter locations
+  const changeSelectDistrictFilterLocatons = (event) => {
+    setState({
+      ...state,
+      temp_district_filter_locations: event.target.value,
+    });
   };
 
   //load locations and districts
@@ -347,7 +355,28 @@ export default () => {
                       alignItems: "center",
                     }}
                   >
-                    <h4 style={{ marginBlock: 5 }}>Locations</h4>
+                    {/* <h4 style={{ marginBlock: 5 }}>Locations</h4> */}
+                    <FormControl style={{ width: "200px" }}>
+                      <InputLabel id="select-district-locations-label">
+                        Select a District
+                      </InputLabel>
+                      <Select
+                        labelId="select-district-locations-label"
+                        value={state.temp_district_filter_locations}
+                        label="Select a District"
+                        onChange={changeSelectDistrictFilterLocatons}
+                      >
+                        {state.districts.length === 0 ? (
+                          <MenuItem value="">No Districts</MenuItem>
+                        ) : (
+                          state.districts.map((v, i) => (
+                            <MenuItem key={i} value={v.district_name}>
+                              {v.district_name}
+                            </MenuItem>
+                          ))
+                        )}
+                      </Select>
+                    </FormControl>
                     <TextField
                       variant="outlined"
                       color="primary"
@@ -377,6 +406,10 @@ export default () => {
                             <tr>
                               <td>....</td>
                             </tr>
+                          ) : !state.temp_district_filter_locations ? (
+                            <tr>
+                              <td>Select district first</td>
+                            </tr>
                           ) : state.location_query ? (
                             state.locations
                               .filter((el) =>
@@ -384,7 +417,12 @@ export default () => {
                                   .toLowerCase()
                                   .includes(state.location_query.toLowerCase())
                               )
-                              .slice(0, 10)
+                              .slice(0, 25)
+                              .filter(
+                                (v) =>
+                                  v.district_name ==
+                                  state.temp_district_filter_locations
+                              )
                               .map((v, i) => {
                                 return (
                                   <tr key={i}>
@@ -408,28 +446,35 @@ export default () => {
                                 );
                               })
                           ) : (
-                            state.locations.slice(0, 10).map((v, i) => {
-                              return (
-                                <tr key={i}>
-                                  <td>{i + 1}</td>
-                                  <td>{v.district_name}</td>
-                                  <td>{v.location_name}</td>
-                                  <td>
-                                    <Button
-                                      onClick={(e) => {
-                                        setState({
-                                          ...state,
-                                          active_location: v,
-                                          selected_district: v.district_name,
-                                        });
-                                      }}
-                                    >
-                                      Edit
-                                    </Button>
-                                  </td>
-                                </tr>
-                              );
-                            })
+                            state.locations
+                              .slice(0, 25)
+                              .filter(
+                                (v) =>
+                                  v.district_name ==
+                                  state.temp_district_filter_locations
+                              )
+                              .map((v, i) => {
+                                return (
+                                  <tr key={i}>
+                                    <td>{i + 1}</td>
+                                    <td>{v.district_name}</td>
+                                    <td>{v.location_name}</td>
+                                    <td>
+                                      <Button
+                                        onClick={(e) => {
+                                          setState({
+                                            ...state,
+                                            active_location: v,
+                                            selected_district: v.district_name,
+                                          });
+                                        }}
+                                      >
+                                        Edit
+                                      </Button>
+                                    </td>
+                                  </tr>
+                                );
+                              })
                           )}
                         </tbody>
                       </table>
