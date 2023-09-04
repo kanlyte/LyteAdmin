@@ -322,7 +322,7 @@ export default () => {
                               );
                             })
                         ) : (
-                          state.districts.slice(0, 10).map((v, i) => {
+                          state.districts.slice(0, 30).map((v, i) => {
                             return (
                               <tr key={i}>
                                 <td>{i + 1}</td>
@@ -408,7 +408,7 @@ export default () => {
                             </tr>
                           ) : !state.temp_district_filter_locations ? (
                             <tr>
-                              <td>Select district first</td>
+                              <td>...</td>
                             </tr>
                           ) : state.location_query ? (
                             state.locations
@@ -417,7 +417,7 @@ export default () => {
                                   .toLowerCase()
                                   .includes(state.location_query.toLowerCase())
                               )
-                              .slice(0, 25)
+                              .slice(0, 30)
                               .filter(
                                 (v) =>
                                   v.district_name ==
